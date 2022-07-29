@@ -5,9 +5,9 @@ import math
 
 def transform_perspective(img: cv2.Mat, pts1):
     #organize_points(pts1)
-    cardH=math.sqrt((pts1[2][0]-pts1[1][0])**2+(pts1[2][1]-pts1[1][1])**2)
-    cardW=math.sqrt(((pts1[0][0]-pts1[1][0])**2)+(pts1[0][1]-pts1[1][1])**2)
-    print(cardH,cardW)
+    cardH=(math.sqrt((pts1[2][0]-pts1[1][0])**2+(pts1[2][1]-pts1[1][1])**2) + math.sqrt((pts1[0][0]-pts1[3][0])**2+(pts1[0][1]-pts1[3][1])**2))/2
+    cardW=(math.sqrt(((pts1[0][0]-pts1[1][0])**2)+(pts1[0][1]-pts1[1][1])**2) + math.sqrt(((pts1[2][0]-pts1[3][0])**2)+(pts1[2][1]-pts1[3][1])**2))/2
+    #print(cardH,cardW)
     # cardW=ratio*cardH;
     pts2 = np.float32([[pts1[0][0],pts1[0][1]], [pts1[0][0]+cardW, pts1[0][1]], [pts1[0][0]+cardW, pts1[0][1]+cardH], [pts1[0][0], pts1[0][1]+cardH]])
     M = cv2.getPerspectiveTransform(pts1,pts2)
@@ -33,7 +33,11 @@ def main():
     pts1 = np.float32([[360,50],[2122,470],[2264, 1616],[328,1820]])
     #pts1 = np.float32([[385,473],[2201,81],[2217, 1857],[385,1609]])
     dst=transform_perspective(img,pts1)
-    export_to_pdf([dst],"out.pdf")
+    img = cv2.imread('test2.jpg')
+    rows,cols,ch = img.shape
+    pts1 = np.float32([[433,469],[2205,53],[2264, 1813],[313,1637]])
+    dst2=transform_perspective(img,pts1)
+    export_to_pdf([dst,dst2],"out.pdf")
 
 if __name__=="__main__":
     main()
