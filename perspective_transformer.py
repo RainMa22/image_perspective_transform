@@ -1,4 +1,3 @@
-import PIL.ImageShow
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,7 +11,7 @@ def transform_perspective(img: cv2.Mat, pts1):
 
     pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
-    dst = cv2.warpPerspective(img, matrix, [int(width),int(height)])
+    dst = cv2.warpPerspective(img, matrix, [int(width), int(height)])
     plt.imshow(img)
     plt.show()
     plt.imshow(dst)
