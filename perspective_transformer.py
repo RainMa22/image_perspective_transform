@@ -1,21 +1,18 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 
 
-def transform_perspective(img: cv2.Mat, pts1):
-    width = euclidean_distance(
-        np.float32([euclidean_distance(pts1[0] - pts1[1]), euclidean_distance(pts1[2] - pts1[3])]))
-    height = euclidean_distance(
-        np.float32([euclidean_distance(pts1[0] - pts1[2]), euclidean_distance(pts1[1] - pts1[3])]))
-
-    pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
+def transform_perspective(img: cv2.Mat, pts1, pts2 = None):
+    if pts2 is None:
+        width = euclidean_distance(
+            np.float32([euclidean_distance(pts1[0] - pts1[1]), euclidean_distance(pts1[2] - pts1[3])]))
+        height = euclidean_distance(
+            np.float32([euclidean_distance(pts1[0] - pts1[2]), euclidean_distance(pts1[1] - pts1[3])]))
+        pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
+    else:
+        width, height = pts2[-1]
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(img, matrix, [int(width), int(height)])
-    plt.imshow(img)
-    plt.show()
-    plt.imshow(dst)
-    plt.show()
     return dst
 
 
